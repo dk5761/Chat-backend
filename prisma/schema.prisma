@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["mongoDb"]
+  binaryTargets = ["native", "darwin", "debian-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = "mongodb+srv://Darshan:NanatsuXIV@cluster0.zjib5.mongodb.net/capp"
+}
+
+model User{
+  id String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  
+  email String @unique
+  // phoneNumber BigInt
+  password String
+  profile Profile @relation(fields: [profileId], references: [id])
+  profileId String  @db.ObjectId // relation scalar field (used in the `@relation` attribute above)
+  
+}
+
+model Profile {
+  id String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  username String
+  profileImage String @default("")
+  user User?
+}
