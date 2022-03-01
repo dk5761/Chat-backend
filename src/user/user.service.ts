@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { UserDto } from './dtos/user.dto';
 import { User } from './schemas/user.schema';
 import { UserRepository } from './user.repo';
@@ -19,19 +19,26 @@ export class UserService {
   }
 
   async getUserByEmail(email: string) {
-    return await this.userRepo.findOneByEmail({ email });
+    return await this.userRepo.findOneByQuery({ email });
+  }
+
+  async getUserByUsername(username: string) {
+    const user = await this.userRepo.findByUsername({ username });
+    console.log(user);
+    return user;
   }
 
   async createUser(
     email: string,
     password: string,
-    profile: {
-      username: string;
-      profileImage?: string;
-    },
+    username: string,
+    profileImage?: string,
   ): Promise<User> {
-    // const profile = {username: "", profileImage: ""}
-    return await this.userRepo.createUser({ email, password, profile });
+    return await this.userRepo.createUser({
+      email,
+      password,
+      username,
+    });
   }
 
   async updateUser(id: string, data: UserDto): Promise<User> {
@@ -40,5 +47,10 @@ export class UserService {
 
   async deleteUser(id: string) {
     return await this.userRepo.delete({ id });
+  }
+
+  async saveSocketUser(id: any, socketId: string) {
+    console.log(id);
+    return await this.userRepo.update({ id }, { socketId });
   }
 }

@@ -3,19 +3,17 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
-import { InjectTwilio, TwilioClient } from 'nestjs-twilio';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private jwtService: JwtService,
-    @InjectTwilio() private readonly client: TwilioClient, // remove this
   ) {}
 
   async validateUser(email: string, password: string) {
     const user = await this.userService.getUserByEmail(email);
-
+    console.log(user);
     const verifyPassword = await bcrypt.compare(password, user.password);
 
     if (user && verifyPassword) {
@@ -38,18 +36,12 @@ export class AuthService {
     return {
       id: user._id,
       email: user.email,
-      username: user.profile.username,
+      username: user.username,
       access_token: await this.jwtService.sign(payload),
     };
   }
 
-  async register(data: {
-    email: string;
-    password: string;
-    profile: {
-      username: string;
-    };
-  }) {
+  async register(data: { email: string; password: string; username: string }) {
     const user = await this.userService.getUserByEmail(data.email);
     if (user) {
       throw new BadRequestException('email in use');
@@ -59,21 +51,17 @@ export class AuthService {
     const newUser = await this.userService.createUser(
       data.email,
       hashed,
-      data.profile,
+      data.username,
     );
 
     return this.login(newUser);
   }
 
-  async loginViaPhone(data: { phone: string }) {
+  async verify(token) {
     try {
-      return await this.client.messages.create({
-        body: 'test sms',
-        from: '+18456533790',
-        to: data.phone,
-      });
-    } catch (e) {
-      return e;
+      return await this.jwtService.verify(token, { secret: 'asdasdasdasd' });
+    } catch (e: any) {
+      console.log('error in verify function :  ', e);
     }
   }
 }

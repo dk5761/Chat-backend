@@ -7,18 +7,26 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-  @Prop()
+  @Prop({ unique: true })
   email: string;
 
   @Prop()
   password: string;
 
-  @Prop({ type: ProfileSchema, required: true })
-  @Type(() => Profile)
-  profile: Profile;
+  @Prop({ unique: true })
+  username: string;
+
+  @Prop({
+    default:
+      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+  })
+  profileImageUrl?: string;
 
   @Prop()
   createdAt?: Date;
+
+  @Prop()
+  socketId?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

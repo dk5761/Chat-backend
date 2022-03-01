@@ -55,4 +55,16 @@ export class UserController {
     }
     return user;
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/:username')
+  async getUserByUsername(@Param('username') username: string) {
+    // console.log(req);
+    const userList = await this.userService.getUserByUsername(username);
+    if (userList === []) {
+      throw new NotFoundException('user not found');
+    }
+    console.log('the user : ', userList);
+    return userList;
+  }
 }
