@@ -8,7 +8,7 @@ export class UserService {
   constructor(private readonly userRepo: UserRepository) {}
 
   async getUserById(id: string) {
-    console.log(id);
+    // console.log(id);
     const user = await this.userRepo.findOne({ id });
 
     if (user) {
@@ -24,7 +24,7 @@ export class UserService {
 
   async getUserByUsername(username: string) {
     const user = await this.userRepo.findByUsername({ username });
-    console.log(user);
+    // console.log(user);
     return user;
   }
 
@@ -50,7 +50,6 @@ export class UserService {
   }
 
   async saveSocketUser(id: any, socketId: string) {
-    console.log(id);
     return await this.userRepo.update({ id }, { socketId });
   }
 }

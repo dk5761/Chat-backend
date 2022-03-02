@@ -40,7 +40,7 @@ export class ChatGateway
 
   // @UseGuards(WsGuard)
   async handleConnection(client: Socket, data: any[]) {
-    console.log('token: ', client.handshake.query.token);
+    // console.log('token: ', client.handshake.query.token);
     if (
       client.handshake.query.token === 'null' ||
       client.handshake.query.token === 'undefined'

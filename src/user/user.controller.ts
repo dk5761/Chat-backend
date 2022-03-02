@@ -33,7 +33,7 @@ export class UserController {
 
   @Get('ping')
   async ping(@Request() req: any) {
-    console.log('ping');
+    // console.log('ping');
     return { message: 'pinged' };
   }
 
@@ -41,7 +41,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Put()
   async update(@Request() req: any, @Body() body: UserDto) {
-    console.log('inside put');
+    // console.log('inside put');
     return await this.userService.updateUser(req.user.id, body);
   }
 
@@ -64,7 +64,16 @@ export class UserController {
     if (userList === []) {
       throw new NotFoundException('user not found');
     }
-    console.log('the user : ', userList);
+    // console.log('the user : ', userList);
     return userList;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('byID/:id')
+  async getUserById(@Param('id') id: string) {
+    // console.log(req);
+    const user = await this.userService.getUserById(id);
+    // console.log('the user : ', userList);
+    return user;
   }
 }
