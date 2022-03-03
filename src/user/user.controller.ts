@@ -42,6 +42,7 @@ export class UserController {
   @Put()
   async update(@Request() req: any, @Body() body: UserDto) {
     // console.log('inside put');
+    console.log('updating called', body, req.user.id);
     return await this.userService.updateUser(req.user.id, body);
   }
 

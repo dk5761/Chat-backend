@@ -10,4 +10,6 @@ export class UserDto {
 
   @IsNotEmpty()
   username: string;
+
+  expoPushToken?: string;
 }

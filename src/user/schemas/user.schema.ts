@@ -27,6 +27,9 @@ export class User {
 
   @Prop()
   socketId?: string;
+
+  @Prop()
+  expoPushToken?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

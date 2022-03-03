@@ -12,11 +12,9 @@ export class WsGuard implements CanActivate {
   ): boolean | any | Promise<boolean | any> | Observable<boolean | any> {
     const bearerToken =
       context.args[0].handshake.headers.authorization.split(' ')[1];
-    // console.log(bearerToken);
     try {
       const decoded = jwt.verify(bearerToken, 'secret') as any;
       return new Promise((resolve, reject) => {
-        // console.log(decoded);
         return this.userService.getUserById(decoded._id).then((user) => {
           if (user) {
             resolve(user);
@@ -26,7 +24,6 @@ export class WsGuard implements CanActivate {
         });
       });
     } catch (ex) {
-      // console.log(ex);
       return false;
     }
   }
